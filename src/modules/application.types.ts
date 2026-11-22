@@ -1,3 +1,6 @@
+import z from "zod";
+import type {UserType} from "./users/users.types";
+
 export type ApplicationEnvironment = {
     Variables: {
         user: UserType; // CHANGED

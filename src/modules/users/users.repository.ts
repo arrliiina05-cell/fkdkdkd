@@ -2,7 +2,7 @@ import { Database } from "bun:sqlite";
 import type {UserType} from "./users.types";
 
 export class UsersRepository {
-  constructor(private readonly database: Database) {}
+  constructor(private readonly database: Database) { }
 
   public init(): void {
     this.database.run(`
@@ -25,4 +25,13 @@ public findByEmail(email: string): UserType|null {
   return this.database
     .query<UserType, {$email: string}>("SELECT * FROM users WHERE email = $email")
     .get({$email: email.trim().toLowercase()});
+}
+
+public create(title: string, email: string, password: string): UserType | null {
+  return this.database
+    .query<UserType, { $title: string; $email: string; $password: string }>(`
+      INSERT INTO users (title, email, password)
+        VALUES ($title, $email, $password) RETURN id, title, email
+    `)
+    .get({ $title: title, $email: email, $password: password });
 }
