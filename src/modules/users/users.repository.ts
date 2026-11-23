@@ -15,10 +15,10 @@ export class UsersRepository {
     `);
   }
 
-public findById(id: number): UserType|null {
+public findById(): UserType[] {
   return this.database
-    .query<UserType, {$id: number}>("SELECT * FROM users WHERE id = $id")
-    .get({$id: id});
+    .query<UserType, []>("SELECT * FROM users")
+    .all();
 }
 
 public findByEmail(email: string): UserType|null {
@@ -34,4 +34,5 @@ public create(title: string, email: string, password: string): UserType | null {
         VALUES ($title, $email, $password) RETURN id, title, email
     `)
     .get({ $title: title, $email: email, $password: password });
+  }
 }

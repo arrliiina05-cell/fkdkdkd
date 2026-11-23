@@ -9,34 +9,46 @@ export class AuthController {
 
     public routes(): Hono {
         return new Hono()
-        .post("/register", ApplicationValidator.validate("json", userRegisterSchema), this.register.bind(this))
-		.post("/auth", ApplicationValidator.validate("json", userAuthSchema), this.auth.bind(this))
-		.get("/me", this.me.bind(this))
+        .post(
+			"/register", 
+			ApplicationValidator.validate("json", userRegisterSchema), 
+			this.register.bind(this)
+		)
+		.post(
+			"/auth", 
+			ApplicationValidator.validate("json", userAuthSchema), 
+			this.auth.bind(this)
+		)
+		.get("/me", this.me.bind(this));
     }
 
     public async register(
 		c: Context<
 			ApplicationEnvironment,
-			"/register", {
+			"/register", 
+			{
 				out: {
 					json: UserRegisterType;
-				}
+				};
 			}
-		>
-	): Promise<TypedResponse<ApplicationResult<UserTokenType>>> { }
+		>,
+	): Promise<TypedResponse<ApplicationResult<UserTokenType>>> {}
 
 	public async auth(
 		c: Context<
 			ApplicationEnvironment,
-			"/auth", {
+			"/auth", 
+			{
 				out: {
 					json: UserAuthType;
-				}
+				};
 			}
-		>
-	): Promise<TypedResponse<ApplicationResult<UserTokenType>>> { }
+		>,
+	): Promise<TypedResponse<ApplicationResult<UserTokenType>>> {}
 
-	public async me(c: Context<ApplicationEnvironment>): Promise<TypedResponse<ApplicationResult<UserType>>> {
+	public async me(
+		c: Context<ApplicationEnvironment>,
+	): Promise<TypedResponse<ApplicationResult<UserType>>> {
 		return c.json({ success: true, data: c.get("user") });
 	}
 
